@@ -2,11 +2,12 @@ Package: portalr
 Type: Package
 Title: PORTAL Data Wrangler
 Version: 0.1.0
+Authors@R: c(person("Bryan","Blanc",role = c("aut","cre"), email = "bryanpblanc@gmail.com"))
 Author: Bryan Blanc
-Maintainer: <bryanpblanc@gmail.com
+Maintainer: <bryanpblanc@gmail.com>
 Description: This package provides tools for querying, aggregating, and exploring data from PORTAL (Portland, Oregon Regional Transportation Data Archive Listing)
 License: GPL
 LazyData: TRUE
-Imports: RPostgreSQL, DBI, rjson
-Suggests: knitr
+Imports: RPostgreSQL, DBI, rjson, plyr, lubridate, timeDate
+Suggests: knitr, ggplot2
 VignetteBuilder: knitr

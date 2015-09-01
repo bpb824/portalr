@@ -7,6 +7,8 @@
 freewayData(con, dets, startTime, endTime)
 }
 \arguments{
+\item{con}{Database connection object.}
+
 \item{dets}{Vector of detector IDs.}
 
 \item{startTime}{Start time of requested data in either a YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format.}

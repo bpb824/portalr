@@ -4,7 +4,7 @@
 \alias{aggTime}
 \title{Aggregate PORTAL data over time.}
 \usage{
-aggTime(unAgg, aggVars, timeCut, hod = FALSE)
+aggTime(unAgg, aggVars, timeCut, hod = TRUE)
 }
 \arguments{
 \item{unAgg}{Data that you want to aggregate.}

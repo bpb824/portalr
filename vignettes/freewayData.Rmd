@@ -4,7 +4,7 @@ author: "Bryan Blanc"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Freeway Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,6 +24,9 @@ con <- dbConnect(dbDriver("PostgreSQL"),
                  user=db_cred$db_credentials$db_user, 
                  password = db_cred$db_credentials$db_pass,
                  dbname=db_cred$db_credentials$db_name)
+#Initialize some metadata, don't worry about the geometry data warnings. 
+detectors = dbGetQuery(con,"SELECT * FROM public.detectors")
+stations= dbGetQuery(con,"SELECT * FROM public.stations")
 ```
 After creating the database connection object, you can begin to start querying data. There are three parameters used to create a basic PORTAL query using `portalr`:
 
@@ -34,14 +37,59 @@ After creating the database connection object, you can begin to start querying d
 An example query is demonstrated below, and `head()` is used to display the first few rows of the table.
 
 ```{r}
-data = freewayData(con = con, dets = 101139, startTime = '2015-07-06',endTime = '2015-07-10')
+#I-205 SB @ Clackamas Hwy
+stas = c(1100) 
+dets = detectors$detectorid[detectors$stationid %in% stas]
+data = freewayData(con = con, dets = dets , startTime = '2015-07-06',endTime = '2015-07-10')
 head(data)
 ```
 
 Typically, this very fine resolution of data (20-second) is not that useful to transportation analysts. That's why the next step we're going to talk about is aggregation. 
 
 ## Aggregating
+Analysts can use the `aggTime()` function to aggregate data to some resolution of time more useful than 20-second. A few examples are given below.
 
-
+I want to separate by lane number in my aggregation, so I can join lanenumber in from the ‘detectors’ table in the ‘public’ schema of PORTAL.
+```{r}
+joined = join(data,detectors, by="detectorid")
+agg = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "15 min",hod = FALSE)
+head(agg)
+```
+In the below aggregation, I am going to cut the data by hour, and than aggregate it by hour of day.
+```{r}
+agg_hod = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "1 hour",hod = TRUE)
+head(agg_hod)
+```
+This data can be easily visualized using the ggplot2 package.
 
 ## Visualizing
+```{r, fig.width=7, fig.height=3}
+require(ggplot2)
+ggplot(agg,aes(x=period,y=speed,group =lanenumber, colour = lanenumber))+
+  geom_line()+scale_colour_discrete(name="Lane Number")+
+  scale_x_datetime()+
+  ggtitle("I-205 SB @ Clackamas Hwy \n(Hourly speeds over 2015-07-06 to 2015-07-10)")+
+  ylab("Mean Speed (mph)")+xlab("")
+```
+
+I can visualize the hour of day graph using ggplot and setting up a few of the labels.
+
+```{r, fig.width=7, fig.height=3}
+require(ggplot2)
+timeLabs = c("3 AM","6 AM","9 AM","12 PM","3 PM","6 PM","9 PM")
+timeTicks = seq(3,21,3)
+ggplot(agg_hod,aes(x=hod,y=speed,group =lanenumber, colour = lanenumber))+
+  geom_line()+scale_colour_discrete(name="Lane Number")+
+  ggtitle("I-205 SB @ Clackamas Hwy \n(Mean hourly speed over 2015-07-06 to 2015-07-10)")+
+  ylab("Mean Speed (mph)")+xlab("")+
+  scale_x_continuous(breaks = timeTicks,labels = timeLabs)
+```
+
+## Last Steps
+
+Always close all your connections when you are done.
+
+```{r}
+dbDisconnect(con)
+```
+
