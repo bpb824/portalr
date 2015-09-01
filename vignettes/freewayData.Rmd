@@ -1,0 +1,47 @@
+---
+title: "Querying, Aggregating, and Exploring PORTAL Freeway Data"
+author: "Bryan Blanc"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The purpose of this vignette is to provide examples of how to use `portalr` to query, aggregate and explore freeway data from PORTAL, Portland's regional transportation data archive. 
+
+## Querying
+
+Analysts can used the `freewayData()` function to request data for one or more detectors over a range of time.
+
+Before you can query the database, you must create a database connection object, as demonstrated below. This step requires the use of a file called 'db_credentials.json', which contains your database authentication information. 
+```{r}
+db_cred = fromJSON(file="db_credentials.json")
+con <- dbConnect(dbDriver("PostgreSQL"), 
+                 host=db_cred$db_credentials$db_host, 
+                 port= 5432, 
+                 user=db_cred$db_credentials$db_user, 
+                 password = db_cred$db_credentials$db_pass,
+                 dbname=db_cred$db_credentials$db_name)
+```
+After creating the database connection object, you can begin to start querying data. There are three parameters used to create a basic PORTAL query using `portalr`:
+
+- Detector IDs (`dets`): A vector of detector IDs for which you would like to query data. These can be found within the PORTAL station metadata. 
+- Start Time (`startTime`): A string indicating what date/time to begin your query in the YYYY-MM-DD or YYYY-MM-DD HH:MM:SS formats. 
+- End Time (`endTime`): A string indicating what date/time to end your query in the YYYY-MM-DD or YYYY-MM-DD HH:MM:SS formats. 
+
+An example query is demonstrated below, and `head()` is used to display the first few rows of the table.
+
+```{r}
+data = freewayData(con = con, dets = 101139, startTime = '2015-07-06',endTime = '2015-07-10')
+head(data)
+```
+
+Typically, this very fine resolution of data (20-second) is not that useful to transportation analysts. That's why the next step we're going to talk about is aggregation. 
+
+## Aggregating
+
+
+
+## Visualizing
