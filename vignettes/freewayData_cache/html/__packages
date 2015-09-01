@@ -1,0 +1,11 @@
+base
+DBI
+RPostgreSQL
+timeDate
+timeSeries
+plyr
+ggplot2
+lubridate
+rjson
+devtools
+portalr
