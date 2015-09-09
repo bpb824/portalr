@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>aggTime. portalr 0.1.0</title>
+<title>qualityCheck. portalr 0.1.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,30 +47,28 @@
         
       </header>
       
-      <h1>Aggregate PORTAL data over time.</h1>
+      <h1>Quality check PORTAL freeway data</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>aggTime(unAgg, aggVars, timeCut, hod&nbsp;=&nbsp;FALSE)</div></pre>
+    <pre><div>qualityCheck(fData, tolerance&nbsp;=&nbsp;"high", timeCut)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>unAgg</dt>
-      <dd>Data that you want to aggregate.</dd>
-      <dt>aggVars</dt>
-      <dd>Variables you want to retain in aggregation, such as 'lanenumber' or 'stationid'</dd>
+      <dt>fData</dt>
+      <dd>Your raw freeway dataframe.</dd>
+      <dt>tolerance</dt>
+      <dd>A tolerance level of "high", "medium", or "low". "high" is the least conservative tolerance.</dd>
       <dt>timeCut</dt>
-      <dd>A string indicating how you want to aggregate over time. Examples include '1 min', '5 min', '1 hour', '1 day', etc.</dd>
-      <dt>hod</dt>
-      <dd>A boolean indicating weather you want to aggregate by hour of day across multiple days.</dd>
+      <dd>The time aggregation over which to test quality. Most inuitive strings are accepted, such as "5 min" or "1 hour" or "1 day"</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-Aggregated data.
+A list of flags seperated by detector and time period.
 </dl></p>
   
     </div>
@@ -78,13 +76,13 @@ Aggregated data.
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Aggregate PORTAL data over time.</p>
+      <p>Quality check PORTAL freeway data</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>aggTime</li>
+      <li>qualityCheck</li>
     </ul>
     <ul>
       

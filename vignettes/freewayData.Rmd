@@ -16,7 +16,14 @@ The purpose of this vignette is to provide examples of how to use `portalr` to q
 Analysts can used the `freewayData()` function to request data for one or more detectors over a range of time.
 
 Before you can query the database, you must create a database connection object, as demonstrated below. This step requires the use of a file called 'db_credentials.json', which contains your database authentication information. 
-```{r}
+```{r,warning=FALSE,message=FALSE}
+#Package imports
+require(portalr)
+require(rjson)
+require(DBI)
+require(RPostgreSQL)
+require(plyr)
+
 db_cred = fromJSON(file="db_credentials.json")
 con <- dbConnect(dbDriver("PostgreSQL"), 
                  host=db_cred$db_credentials$db_host, 
@@ -24,7 +31,7 @@ con <- dbConnect(dbDriver("PostgreSQL"),
                  user=db_cred$db_credentials$db_user, 
                  password = db_cred$db_credentials$db_pass,
                  dbname=db_cred$db_credentials$db_name)
-#Initialize some metadata, don't worry about the geometry data warnings. 
+#Initialize some metadata
 detectors = dbGetQuery(con,"SELECT * FROM public.detectors")
 stations= dbGetQuery(con,"SELECT * FROM public.stations")
 ```
@@ -60,7 +67,7 @@ In the below aggregation, I am going to cut the data by hour, and than aggregate
 agg_hod = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "1 hour",hod = TRUE)
 head(agg_hod)
 ```
-This data can be easily visualized using the ggplot2 package.
+This data can be easily visualized using the ggplot2 package. In the first plot, I can see the oscillation in mean hourly traffic speed by lane. 
 
 ## Visualizing
 ```{r, fig.width=7, fig.height=3}

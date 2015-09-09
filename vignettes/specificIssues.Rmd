@@ -1,0 +1,76 @@
+---
+title: "Analyzing Specific Issues"
+author: "Bryan Blanc"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Specific Issues}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+The purpose of this vignette is to demonstrate how the functions in this package were used to diagnose several PORTAL data quality issues. 
+
+## Initialization
+First, we must set up our workspace. This includes attaching the neccesary packages (including `portalr`!), setting up a database connection, and loading the station and detector metadata tables. 
+```{r,message=FALSE, warning=FALSE}
+#Load neccesary libraries
+require(portalr)
+require(RPostgreSQL)
+require(DBI)
+require(plyr)
+require(ggplot2)
+require(lubridate)
+require(rjson)
+
+#Connect to Portal db, make sure you VPN into PSU CECS network
+db_cred = fromJSON(file="db_credentials.json")
+con <- dbConnect(dbDriver("PostgreSQL"), 
+                 host=db_cred$db_credentials$db_host, 
+                 port= 5432, 
+                 user=db_cred$db_credentials$db_user, 
+                 password = db_cred$db_credentials$db_pass, 
+                 dbname=db_cred$db_credentials$db_name)
+
+#Read in relational Tables
+stations= dbGetQuery(con,"SELECT * FROM public.stations")
+detectors = dbGetQuery(con,"SELECT * FROM public.detectors")
+```
+
+## Issue 20: I-84 WB west of Grand – Very High Lane Volumes
+The radar detector located at I-84 Westbound west of Grand Ave. was noted by an ODOT staff member to have very high lane volumes. This prompted the specific investigation of the detector at this station. 
+
+### Querying the data
+First, we have to figure out which detectors belong to this station. A 'station' is a geographic location where information is being gathered by one or more 'detectors'. In this case, a Wavetronix radar sensor is gathering data about three lanes of traffic, which are seperated into individual 'detectors'. The station ID was grabbed from the station metadata for this station, and the detector IDs were then pulled from the detector metadata based on the station ID. The data was then queried based on the detector IDs and a specified time range; the month of July was used for the example here. 
+```{r}
+sta = 3126
+dets = detectors$detectorid[detectors$stationid %in% sta]
+startDate = "2015-07-01"
+endDate = "2015-07-31"
+raw = freewayData(con,dets,startDate,endDate)
+```
+
+### Aggregating the data
+```{r}
+joined = join(raw,detectors,by="detectorid")
+joined$dow = weekdays(joined$starttime,abbreviate = TRUE)
+mf = subset(joined,joined$dow != "Sat" & joined$dow != "Sun")
+agg = aggTime(mf,"lanenumber","hour",hod=FALSE)
+head(agg)
+```
+
+### Plotting the data
+```{r,fig.width=7,fig.height=4, message=FALSE, warning=FALSE}
+agg$hod=hour(as.POSIXct(agg$period))
+timeLabs = c("3 AM","6 AM","9 AM","12 PM","3 PM","6 PM","9 PM")
+timeTicks = seq(3,21,3)
+ggplot(agg,aes(x=hod,y=volume,group=lanenumber,colour=lanenumber))+
+  geom_point(alpha=0.3)+geom_smooth()+xlab("Hour of Day")+
+  ylab("Volume (vph)")+
+  scale_x_continuous(breaks = timeTicks,labels = timeLabs)+
+  scale_y_continuous(limits=c(0,3000))+
+  ggtitle("Weekday volumes plotted by hour of day and lane \n for I-84 WB W of Grand")+
+  scale_colour_discrete(name="Lane Number")
+```
+
+
+

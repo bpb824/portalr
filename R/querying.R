@@ -11,7 +11,7 @@
 freewayData = function(con,dets,startTime,endTime){
 
   #Start time querying parameter
-  if(as.Date(startTime)==startTime){
+  if(identical(as.character(as.Date(startTime)),startTime)){
     qStart = paste0("'",startTime,"T00:00:00","'")
   }else{
     split = unlist(strsplit(startTime," "))
@@ -19,7 +19,7 @@ freewayData = function(con,dets,startTime,endTime){
   }
 
   #End time querying parameter
-  if(as.Date(endTime)==endTime){
+  if(identical(as.character(as.Date(endTime)),endTime)){
     qEnd = paste0("'",endTime,"T23:59:59","'")
   }else{
     split = unlist(strsplit(endTime," "))
@@ -34,7 +34,7 @@ freewayData = function(con,dets,startTime,endTime){
   }
   query = paste0(query,")")
 
-  result = dbGetQuery(con,query)
+  result = DBI::dbGetQuery(con,query)
 
   #No data in freeway table, try public table
   if(nrow(result)==0){
@@ -59,7 +59,7 @@ freewayData = function(con,dets,startTime,endTime){
       query = paste0(query,")")
       result = dbGetQuery(con,query)
     }else{
-      monthVec = timeSequence(startDate,endDate,by="month")
+      monthVec = timeDate::timeSequence(startDate,endDate,by="month")
       monthVec = gsub("-","_",substr(monthVec,1,7))
       dataList = list()
       query = paste0("SELECT * FROM public.loopdata_",monthVec[1]," WHERE (starttime >=",qStart," AND starttime <=",qEnd,") AND (detectorid = ",dets[1])
@@ -114,7 +114,7 @@ freewayData = function(con,dets,startTime,endTime){
         query = paste0(query,")")
         result = dbGetQuery(con,query)
       }else{
-        monthVec = timeSequence(startDate,endDate,by="month")
+        monthVec = timeDate::timeSequence(startDate,endDate,by="month")
         monthVec = gsub("-","_",substr(monthVec,1,7))
         dataList = list()
         query = paste0("SELECT * FROM public.loopdata_",monthVec[1]," WHERE (starttime >=",qStart," AND starttime <=",qEnd,") AND (detectorid = ",dets[1])
@@ -156,43 +156,7 @@ freewayData = function(con,dets,startTime,endTime){
   return(result)
 }
 
+ttData = function(){
 
-# publicQuery = function(dets,startTime,endTime){
-#   if(as.Date)
-#
-#   if(startMonth == endMonth){
-#     query = paste0("SELECT * FROM public.loopdata_",startMonth," WHERE (starttime >='",startTime,"T00:00:00' AND starttime <='",endTime,"T23:59:59') AND (detectorid = ",dets[1])
-#     if(length(dets)>1){
-#       for (k in 2:length(dets)){
-#         query = paste0(query," OR detectorid = ",dets[k])
-#       }
-#     }
-#     query = paste0(query,")")
-#     return(query)
-#   }else{
-#     stop("Have not developed multiple month public query yet")
-#   }
-#
-# }
-#
-# freewayQuery = function(dets,startTime,endTime){
-#   query = paste0("SELECT * FROM freeway.data WHERE (starttime >='",startTime,"T00:00:00' AND starttime <='",endTime,"T23:59:59') AND (detectorid = ",dets[1])
-#   if(length(dets)>1){
-#     for (i in 2:length(dets)){
-#       query = paste0(query," OR detectorid = ",dets[i])
-#     }
-#   }
-#   query = paste0(query,")")
-#   return(query)
-# }
-#
-# freewayQuery_time = function(dets,startTime,endTime){
-#   query = paste0("SELECT * FROM freeway.data WHERE (starttime >='",startTime,"' AND starttime <='",endTime,"') AND (detectorid = ",dets[1])
-#   if(length(dets)>1){
-#     for (i in 2:length(dets)){
-#       query = paste0(query," OR detectorid = ",dets[i])
-#     }
-#   }
-#   query = paste0(query,")")
-#   return(query)
-# }
+}
+

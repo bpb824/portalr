@@ -49,7 +49,20 @@
       
       <div class="row">
   <div class="span8">
-    This package provides tools for querying, aggregating, and exploring data from PORTAL (Portland, Oregon Regional Transportation Data Archive Listing)
+    <h1>portalr</h1>
+
+<p>R package for exploring PORTAL data. </p>
+
+<p><code>portalr</code> is a package of tools for querying, aggregating, and exploring data from PORTAL (Portland Oregon Regional Transportation Archive Listing). For more information about PORTAL, visit <a href="http://portal.its.pdx.edu">http://portal.its.pdx.edu</a>. The <code>portalr</code> package is being documented using <code>staticdocs</code> at <a href="http://bigtransportdata.com/portalr/">http://bigtransportdata.com/portalr/</a>. </p>
+
+<h2>Installation</h2>
+
+<p>This package is still in development, but you can get the most recent development version from <a href="https://github.com/bpb824">Bryan&#39;s GitHub</a>. Package installation is demonstrated below. </p>
+
+<pre><code class="R"># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;bpb824/portalr&quot;)
+</code></pre>
+
 
     <h2>Help topics</h2>
 
@@ -62,7 +75,13 @@
         <code><a href="aggTime.html">aggTime</a></code><br />Aggregate PORTAL data over time.</li>
             
       <li>
+        <code><a href="filterFreeway.html">filterFreeway</a></code><br />Filter freeway data using threshold values</li>
+            
+      <li>
         <code><a href="freewayData.html">freewayData</a></code><br />Query and return freeway loop and radar data from PORTAL</li>
+            
+      <li>
+        <code><a href="qualityCheck.html">qualityCheck</a></code><br />Quality check PORTAL freeway data</li>
     
     </ul>
   </div>
@@ -71,6 +90,7 @@
     <h2>Vignettes</h2>
     <ul>
       <li><a href="vignettes/freewayData.html">Freeway Data</a></li>
+      <li><a href="vignettes/specificIssues.html">Specific Issues</a></li>
     </ul>
         
     <h2>Dependencies</h2>
