@@ -1,0 +1,46 @@
+---
+title: "Creating a speed heatmap (AKA brainscan) using PORTAL Freeway Data"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Freeway Speed Heatmap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+The purpose of this vignette is to demonstrate how to use the `freewaySpeedMap` function to create a "brainscan" plot for a corridor within PORTAL's available freeway data. 
+
+##Initialization
+First, we load the neccesary packages to create the database connection and review our options for freeway corridors. 
+```{r,warning=FALSE,message=FALSE}
+#Package imports
+require(portalr)
+require(rjson)
+require(DBI)
+require(RPostgreSQL)
+
+db_cred = fromJSON(file="db_credentials.json")
+con <- dbConnect(dbDriver("PostgreSQL"), 
+                 host=db_cred$db_credentials$db_host, 
+                 port= 5432, 
+                 user=db_cred$db_credentials$db_user, 
+                 password = db_cred$db_credentials$db_pass,
+                 dbname=db_cred$db_credentials$db_name)
+#Fetch corridor metadata
+corridors  = dbGetQuery(con,"SELECT * FROM public.corridors")
+#Sort corridors by ID
+corridors = corridors[order(corridors$corridorid),]
+#Subset to new corridor definitions (i.e. corridor ID > 7000 & < 8000)
+corridors[corridors$corridorid >7000 & corridors$corridorid <8000,
+          c("corridorid","shortname","longname")]
+```
+
+## Plotting 
+Let's try a couple of different corridors during different time periods.
+
+This will plot for the 'Portland Central City to Vancouver - NB' corridor during August for weekdays. 
+```{r,fig.width=7,fig.height=4}
+freewaySpeedMap(con= con,startDate = "2015-08-01", endDate = "2015-08-31",
+                weekdays = TRUE)
+```
+
