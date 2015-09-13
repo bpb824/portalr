@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>aggTime. portalr 0.1.0</title>
+<title>freewaySpeedMap. portalr 0.1.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,30 +47,34 @@
         
       </header>
       
-      <h1>Aggregate PORTAL data over time.</h1>
+      <h1>freewaySpeedMap</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>aggTime(unAgg, aggVars, timeCut, acrossDays&nbsp;=&nbsp;FALSE)</div></pre>
+    <pre><div>freewaySpeedMap(con, corridorID, startDate, endDate, weekdays&nbsp;=&nbsp;TRUE, outputPng&nbsp;=&nbsp;NULL)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>unAgg</dt>
-      <dd>Data that you want to aggregate.</dd>
-      <dt>aggVars</dt>
-      <dd>Variables you want to retain in aggregation, such as 'lanenumber' or 'stationid'</dd>
-      <dt>timeCut</dt>
-      <dd>A string indicating how you want to aggregate over time. Examples include '1 min', '5 min', '1 hour', '1 day', etc.</dd>
-      <dt>hod</dt>
-      <dd>A boolean indicating weather you want to aggregate by hour of day across multiple days.</dd>
+      <dt>con</dt>
+      <dd>database connection PORTAL PostgreSQL database</dd>
+      <dt>corridorID</dt>
+      <dd>ID number of the corridor to plot. See 'corrdidors' table to select ID for plotting.</dd>
+      <dt>startDate</dt>
+      <dd>Start date of data to query (YYYY-MM-DD format)</dd>
+      <dt>endDate</dt>
+      <dd>End date of data to query (YYYY-MM-DD format)</dd>
+      <dt>weekdays</dt>
+      <dd>Boolean indicating whether to subset data to weekdays. Defaults to TRUE.</dd>
+      <dt>outputPng</dt>
+      <dd>.png file path of output plot. Default is NULL; if NULL plots to current device (i.e. RStudio plot device).</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-Aggregated data.
+None
 </dl></p>
   
     </div>
@@ -78,13 +82,13 @@ Aggregated data.
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Aggregate PORTAL data over time.</p>
+      <p>freewaySpeedMap</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>aggTime</li>
+      <li>freewaySpeedMap</li>
     </ul>
     <ul>
       

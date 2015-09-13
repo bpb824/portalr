@@ -8,6 +8,6 @@ Maintainer: <bryanpblanc@gmail.com>
 Description: This package provides tools for querying, aggregating, and exploring data from PORTAL (Portland, Oregon Regional Transportation Data Archive Listing)
 License: GPL-3
 LazyData: TRUE
-Imports: RPostgreSQL, DBI, rjson, plyr, lubridate, timeDate
-Suggests: knitr, ggplot2
+Imports: RPostgreSQL, DBI, rjson, plyr, lubridate, timeDate, akima, ggplot2
+Suggests: knitr
 VignetteBuilder: knitr

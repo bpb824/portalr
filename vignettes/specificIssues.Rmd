@@ -54,13 +54,14 @@ raw = freewayData(con,dets,startDate,endDate)
 joined = join(raw,detectors,by="detectorid")
 joined$dow = weekdays(joined$starttime,abbreviate = TRUE)
 mf = subset(joined,joined$dow != "Sat" & joined$dow != "Sun")
-agg = aggTime(mf,"lanenumber","hour",hod=FALSE)
+agg = aggTime(mf,"lanenumber","hour", acrossDays =FALSE)
 head(agg)
 ```
 
 ### Plotting the data
 ```{r,fig.width=7,fig.height=4, message=FALSE, warning=FALSE}
 agg$hod=hour(as.POSIXct(agg$period))
+agg$lanenumber= factor(agg$lanenumber)
 timeLabs = c("3 AM","6 AM","9 AM","12 PM","3 PM","6 PM","9 PM")
 timeTicks = seq(3,21,3)
 ggplot(agg,aes(x=hod,y=volume,group=lanenumber,colour=lanenumber))+

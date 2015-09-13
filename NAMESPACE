@@ -3,4 +3,5 @@
 export(aggTime)
 export(filterFreeway)
 export(freewayData)
+export(freewaySpeedMap)
 export(qualityCheck)

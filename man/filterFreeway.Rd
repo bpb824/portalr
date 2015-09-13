@@ -2,7 +2,7 @@
 % Please edit documentation in R/filtering.R
 \name{filterFreeway}
 \alias{filterFreeway}
-\title{Filter freeway data using threshold values}
+\title{Filter freeway data}
 \usage{
 filterFreeway(fdata)
 }

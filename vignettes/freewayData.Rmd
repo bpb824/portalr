@@ -59,12 +59,12 @@ Analysts can use the `aggTime()` function to aggregate data to some resolution o
 I want to separate by lane number in my aggregation, so I can join lanenumber in from the ‘detectors’ table in the ‘public’ schema of PORTAL.
 ```{r}
 joined = join(data,detectors, by="detectorid")
-agg = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "15 min",hod = FALSE)
+agg = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "15 min",acrossDays= FALSE)
 head(agg)
 ```
-In the below aggregation, I am going to cut the data by hour, and than aggregate it by hour of day.
+In the below aggregation, I am going to cut the data by hour, and than aggregate it by hour of day across all the days in the dataset.
 ```{r}
-agg_hod = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "1 hour",hod = TRUE)
+agg_hod = aggTime(unAgg=joined,aggVars = "lanenumber",timeCut = "1 hour",acrossDays = TRUE)
 head(agg_hod)
 ```
 This data can be easily visualized using the ggplot2 package. In the first plot, I can see the oscillation in mean hourly traffic speed by lane. 
@@ -72,6 +72,8 @@ This data can be easily visualized using the ggplot2 package. In the first plot,
 ## Visualizing
 ```{r, fig.width=7, fig.height=3}
 require(ggplot2)
+#Lane number needs to be converted from integer to factor for plotting
+agg$lanenumber = factor(agg$lanenumber)
 ggplot(agg,aes(x=period,y=speed,group =lanenumber, colour = lanenumber))+
   geom_line()+scale_colour_discrete(name="Lane Number")+
   scale_x_datetime()+
@@ -83,13 +85,15 @@ I can visualize the hour of day graph using ggplot and setting up a few of the l
 
 ```{r, fig.width=7, fig.height=3}
 require(ggplot2)
-timeLabs = c("3 AM","6 AM","9 AM","12 PM","3 PM","6 PM","9 PM")
-timeTicks = seq(3,21,3)
-ggplot(agg_hod,aes(x=hod,y=speed,group =lanenumber, colour = lanenumber))+
+require(scales)
+#Lane number needs to be converted from integer to factor for plotting
+agg_hod$lanenumber = factor(agg_hod$lanenumber)
+
+ggplot(agg_hod,aes(x=time,y=speed,group =lanenumber, colour = lanenumber))+
   geom_line()+scale_colour_discrete(name="Lane Number")+
   ggtitle("I-205 SB @ Clackamas Hwy \n(Mean hourly speed over 2015-07-06 to 2015-07-10)")+
   ylab("Mean Speed (mph)")+xlab("")+
-  scale_x_continuous(breaks = timeTicks,labels = timeLabs)
+  scale_x_datetime(labels = date_format("%I:%M %p", tz=Sys.timezone()))
 ```
 
 ## Last Steps

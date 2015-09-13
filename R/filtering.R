@@ -1,4 +1,4 @@
-#' Filter freeway data using threshold values
+#' Filter freeway data
 #'
 #' This function will use six criteria developed for filtering PORTAL data to filter your raw data. The criteria are summmarized on Table 1 of this document: http://portal.its.pdx.edu/Portal/static/files/fhwa/Freeway%20Data%20Documentation.pdf
 #'

@@ -7,15 +7,16 @@
 #'
 #' @return Aggregated data.
 #' @export
-aggTime= function(unAgg, aggVars, timeCut, hod = FALSE){
+aggTime= function(unAgg, aggVars, timeCut, acrossDays = FALSE){
   unAgg$period = cut(unAgg$starttime,breaks =timeCut)
   agg = plyr::ddply(unAgg, c(aggVars,"period"),function(X) data.frame(volume=sum(X$volume), occupancy = mean(X$occupancy), speed = weighted.mean(X$speed,X$volume)))
   agg$period = as.POSIXct(agg$period)
-  agg$lanenumber = factor(agg$lanenumber)
-  if(hod){
-    agg$hod = lubridate::hour(agg$period)
-    agg_hour = plyr::ddply(agg,c(aggVars,"hod"),function(X) data.frame(volume=mean(X$volume), occupancy = mean(X$occupancy), speed = weighted.mean(X$speed,X$volume)))
-    return(agg_hour)
+  #agg$lanenumber = factor(agg$lanenumber)
+  if(acrossDays){
+    agg$time = strftime(as.POSIXct(agg$period), format="%H:%M:%S")
+    agg_time = plyr::ddply(agg,c(aggVars,"time"),function(X) data.frame(volume=mean(X$volume), occupancy = mean(X$occupancy), speed = weighted.mean(X$speed,X$volume)))
+    agg_time$time = as.POSIXct(agg_time$time,format ="%H:%M:%S" )
+    return(agg_time)
   }else{
     return(agg)
   }
