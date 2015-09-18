@@ -1,6 +1,6 @@
 ---
-title: "Creating a speed heatmap (AKA brainscan) using PORTAL Freeway Data"
-author: "Vignette Author"
+title: "Creating a speed heatmap using PORTAL Freeway Data"
+author: "Bryan Blanc"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-The purpose of this vignette is to demonstrate how to use the `freewaySpeedMap` function to create a "brainscan" plot for a corridor within PORTAL's available freeway data. 
+The purpose of this vignette is to demonstrate how to use the `freewaySpeedMap` function to create a speed-based heatmap (AKA "brainscan" plot) for a corridor within PORTAL's available freeway data. 
 
 ##Initialization
 First, we load the neccesary packages to create the database connection and review our options for freeway corridors. 
@@ -32,15 +32,37 @@ corridors  = dbGetQuery(con,"SELECT * FROM public.corridors")
 corridors = corridors[order(corridors$corridorid),]
 #Subset to new corridor definitions (i.e. corridor ID > 7000 & < 8000)
 corridors[corridors$corridorid >7000 & corridors$corridorid <8000,
-          c("corridorid","shortname","longname")]
+          c("corridorid","longname")]
 ```
 
 ## Plotting 
 Let's try a couple of different corridors during different time periods.
 
-This will plot for the 'Portland Central City to Vancouver - NB' corridor during August for weekdays. 
-```{r,fig.width=7,fig.height=4}
-freewaySpeedMap(con= con,startDate = "2015-08-01", endDate = "2015-08-31",
+This will plot for the 'Portland Central City to Vancouver - NB' corridor during early August for weekdays.
+```{r,fig.width=8,fig.height=5, warning=FALSE}
+freewaySpeedMap(con= con,corridorID = 7001,startDate = "2015-08-01", endDate = "2015-08-08",
                 weekdays = TRUE)
+```
+
+This will plot for the 'OR US 26 East - WB' corridor during early August for all days (including weekends).
+```{r,fig.width=8,fig.height=5, warning=FALSE}
+freewaySpeedMap(con= con,corridorID = 7024,startDate = "2015-08-01", endDate = "2015-08-08",
+                weekdays = FALSE)
+```
+
+This will output a plot to a .png file for the 'Portland Central City to Gateway - EB' corridor during early August for weekdays (including weekends).
+```{r,fig.width=8,fig.height=5, warning=FALSE}
+freewaySpeedMap(con= con,corridorID = 7011,startDate = "2015-08-01", endDate = "2015-08-08", weekdays = FALSE, outputPng = "i84eb_east.png")
+```
+
+Using HTML, the plot is being displayed below from the output file. 
+<img src="i84eb_east.png" height="400px" width="600px" />
+
+## Last Steps
+
+Always close all your connections when you are done.
+
+```{r}
+dbDisconnect(con)
 ```
 

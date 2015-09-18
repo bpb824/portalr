@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 # portalr
 R package for exploring PORTAL data. 
 
@@ -8,7 +11,7 @@ R package for exploring PORTAL data.
 This package is still in development, but you can get the most recent development version from [Bryan's GitHub](https://github.com/bpb824). Package installation is demonstrated below. 
 
 ```R
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("bpb824/portalr")
 ```
 

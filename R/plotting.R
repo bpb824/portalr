@@ -1,31 +1,6 @@
-# # Initialization ----------------------------------------------------------
-#
-# #Load neccesary libraries
-# require(RPostgreSQL)
-# require(DBI)
-# require(timeSeries)
-# require(plyr)
-# require(ggplot2)
-# require(lubridate)
-# require(rjson)
-# require(akima)
-#
-# #Set working directory
-# setwd("/Users/bblanc/OneDrive/_ODOT/_Portal/investigations/")
-#
-# #Connect to Portal db, make sure you VPN into PSU CECS network
-# db_cred = fromJSON(file="db_credentials.json")
-# con <- dbConnect(dbDriver("PostgreSQL"), host=db_cred$db_credentials$db_host, port= 5432, user=db_cred$db_credentials$db_user, password = db_cred$db_credentials$db_pass, dbname=db_cred$db_credentials$db_name)
-#
-# #Read in relational Tables
-# stations= dbGetQuery(con,"SELECT * FROM public.stations")
-# highways = dbGetQuery(con,"SELECT * FROM public.highways")
-# detectors = dbGetQuery(con,"SELECT * FROM public.detectors")
-# corridors  = dbGetQuery(con,"SELECT * FROM public.corridors")
-# corridor_stations = dbGetQuery(con,"SELECT * FROM public.corridorstations")
-
-
 #' freewaySpeedMap
+#'
+#' Produces a speed-based heatmap (AKA brainscan plot) for a corridor with PORTAL's freeway data system. See Freeway Speed Map vignette for example usage.
 #'
 #' @param con database connection PORTAL PostgreSQL database
 #' @param corridorID ID number of the corridor to plot. See 'corrdidors' table to select ID for plotting.
@@ -62,7 +37,7 @@ freewaySpeedMap = function(con,corridorID,startDate,endDate,weekdays=TRUE,output
 
 
 
-  agg$hour = hour(agg$time)+minute(agg$time)/60
+  agg$hour = lubridate::hour(agg$time)+lubridate::minute(agg$time)/60
 
   #plotData = aggData[,c("hour","milepost","speed","stationid")]
   agg = subset(agg,!is.nan(agg$speed))
@@ -90,12 +65,13 @@ freewaySpeedMap = function(con,corridorID,startDate,endDate,weekdays=TRUE,output
     ggplot2::geom_tile() +
     ggplot2::scale_fill_distiller(palette="RdYlGn", na.value="white",name="Speed (mph)") +
     ggplot2::scale_y_continuous(breaks = stationRef$milepost,labels =stationLabs)+
-    ggplot2::scale_x_continuous(breaks= hourTicks,labels = hourLabs)+xlab("")+ylab("Location")+
+    ggplot2::scale_x_continuous(breaks= hourTicks,labels = hourLabs)+
+    ggplot2::xlab("")+ggplot2::ylab("Location")+
     ggplot2::ggtitle(paste0("Speed heatmap for ", corridors$longname[corridors$corridorid==corridorID],
                    "\n",weekdayString, startDate, " to ", endDate))
 
   if(is.null(outputPng)){
-    ggplot2::theme_set(ggplot2::theme_bw(base_size = 15))
+    ggplot2::theme_set(ggplot2::theme_bw(base_size = 12))
     print(plt)
   }else{
     ggplot2::theme_set(ggplot2::theme_bw(base_size = 25))

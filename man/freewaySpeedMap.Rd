@@ -24,6 +24,6 @@ freewaySpeedMap(con, corridorID, startDate, endDate, weekdays = TRUE,
 None
 }
 \description{
-freewaySpeedMap
+Produces a speed-based heatmap (AKA brainscan plot) for a corridor with PORTAL's freeway data system. See Freeway Speed Map vignette for example usage.
 }
 
