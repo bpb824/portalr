@@ -156,7 +156,38 @@ freewayData = function(con,dets,startTime,endTime){
   return(result)
 }
 
-ttData = function(){
+segInvetory = dbGetQuery(con,paste0("SELECT * FROM odot.ttseginventory"))
+latest = max(segInvetory$inventory_date)
+currentInventory = subset(segInvetory,segInvetory$inventory_date==latest)
 
+segments= currentInventory$segment_id[1:5]
+
+ttData = function(con,segments,startTime,endTime){
+
+  #Start time querying parameter
+  if(identical(as.character(as.Date(startTime)),startTime)){
+    qStart = paste0("'",startTime,"T00:00:00","'")
+  }else{
+    split = unlist(strsplit(startTime," "))
+    qStart = paste0("'",split[1],"T",split[2],"'")
+  }
+
+  #End time querying parameter
+  if(identical(as.character(as.Date(endTime)),endTime)){
+    qEnd = paste0("'",endTime,"T23:59:59","'")
+  }else{
+    split = unlist(strsplit(endTime," "))
+    qEnd = paste0("'",split[1],"T",split[2],"'")
+  }
+
+  query = paste0("SELECT * FROM odot.ttdcutraversals WHERE (traversal_submitted >=",qStart," AND traversal_submitted <=",qEnd,") AND (segment_id = ",segments[1])
+  if(length(segments)>1){
+    for (i in 2:length(segments)){
+      query = paste0(query," OR segment_id = ",segments[i])
+    }
+  }
+  query = paste0(query,")")
+
+  raw = dbGetQuery(con,query)
 }
 
