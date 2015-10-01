@@ -57,7 +57,7 @@ freewayData = function(con,dets,startTime,endTime){
         }
       }
       query = paste0(query,")")
-      result = dbGetQuery(con,query)
+      result = DBI::dbGetQuery(con,query)
     }else{
       monthVec = timeDate::timeSequence(startDate,endDate,by="month")
       monthVec = gsub("-","_",substr(monthVec,1,7))
@@ -69,7 +69,7 @@ freewayData = function(con,dets,startTime,endTime){
         }
       }
       query = paste0(query,")")
-      subResult = dbGetQuery(con,query)
+      subResult = DBI::dbGetQuery(con,query)
       dataList[[1]]=subResult
       for (i in 2:length(monthVec)){
         query = paste0("SELECT * FROM public.loopdata_",monthVec[i]," WHERE (starttime >=",qStart," AND starttime <=",qEnd,") AND (detectorid = ",dets[1])
@@ -79,7 +79,7 @@ freewayData = function(con,dets,startTime,endTime){
           }
         }
         query = paste0(query,")")
-        subResult = dbGetQuery(con,query)
+        subResult = DBI::dbGetQuery(con,query)
         dataList[[i]]=subResult
       }
       rowCount = 0
@@ -112,7 +112,7 @@ freewayData = function(con,dets,startTime,endTime){
           }
         }
         query = paste0(query,")")
-        result = dbGetQuery(con,query)
+        result = DBI::dbGetQuery(con,query)
       }else{
         monthVec = timeDate::timeSequence(startDate,endDate,by="month")
         monthVec = gsub("-","_",substr(monthVec,1,7))
@@ -124,7 +124,7 @@ freewayData = function(con,dets,startTime,endTime){
           }
         }
         query = paste0(query,")")
-        subResult = dbGetQuery(con,query)
+        subResult = DBI::dbGetQuery(con,query)
         dataList[[1]]=subResult
         for (i in 2:length(monthVec)){
           query = paste0("SELECT * FROM public.loopdata_",monthVec[i]," WHERE (starttime >=",qStart," AND starttime <=",qEnd,") AND (detectorid = ",dets[1])
@@ -134,7 +134,7 @@ freewayData = function(con,dets,startTime,endTime){
             }
           }
           query = paste0(query,")")
-          subResult = dbGetQuery(con,query)
+          subResult = DBI::dbGetQuery(con,query)
           dataList[[i]]=subResult
         }
         rowCount = 0
@@ -155,39 +155,39 @@ freewayData = function(con,dets,startTime,endTime){
   }
   return(result)
 }
-
-segInvetory = dbGetQuery(con,paste0("SELECT * FROM odot.ttseginventory"))
-latest = max(segInvetory$inventory_date)
-currentInventory = subset(segInvetory,segInvetory$inventory_date==latest)
-
-segments= currentInventory$segment_id[1:5]
-
-ttData = function(con,segments,startTime,endTime){
-
-  #Start time querying parameter
-  if(identical(as.character(as.Date(startTime)),startTime)){
-    qStart = paste0("'",startTime,"T00:00:00","'")
-  }else{
-    split = unlist(strsplit(startTime," "))
-    qStart = paste0("'",split[1],"T",split[2],"'")
-  }
-
-  #End time querying parameter
-  if(identical(as.character(as.Date(endTime)),endTime)){
-    qEnd = paste0("'",endTime,"T23:59:59","'")
-  }else{
-    split = unlist(strsplit(endTime," "))
-    qEnd = paste0("'",split[1],"T",split[2],"'")
-  }
-
-  query = paste0("SELECT * FROM odot.ttdcutraversals WHERE (traversal_submitted >=",qStart," AND traversal_submitted <=",qEnd,") AND (segment_id = ",segments[1])
-  if(length(segments)>1){
-    for (i in 2:length(segments)){
-      query = paste0(query," OR segment_id = ",segments[i])
-    }
-  }
-  query = paste0(query,")")
-
-  raw = dbGetQuery(con,query)
-}
-
+#
+# segInvetory = DBI::dbGetQuery(con,paste0("SELECT * FROM odot.ttseginventory"))
+# latest = max(segInvetory$inventory_date)
+# currentInventory = subset(segInvetory,segInvetory$inventory_date==latest)
+#
+# segments= currentInventory$segment_id[1:5]
+#
+# ttData = function(con,segments,startTime,endTime){
+#
+#   #Start time querying parameter
+#   if(identical(as.character(as.Date(startTime)),startTime)){
+#     qStart = paste0("'",startTime,"T00:00:00","'")
+#   }else{
+#     split = unlist(strsplit(startTime," "))
+#     qStart = paste0("'",split[1],"T",split[2],"'")
+#   }
+#
+#   #End time querying parameter
+#   if(identical(as.character(as.Date(endTime)),endTime)){
+#     qEnd = paste0("'",endTime,"T23:59:59","'")
+#   }else{
+#     split = unlist(strsplit(endTime," "))
+#     qEnd = paste0("'",split[1],"T",split[2],"'")
+#   }
+#
+#   query = paste0("SELECT * FROM odot.ttdcutraversals WHERE (traversal_submitted >=",qStart," AND traversal_submitted <=",qEnd,") AND (segment_id = ",segments[1])
+#   if(length(segments)>1){
+#     for (i in 2:length(segments)){
+#       query = paste0(query," OR segment_id = ",segments[i])
+#     }
+#   }
+#   query = paste0(query,")")
+#
+#   raw = DBI::dbGetQuery(con,query)
+# }
+#

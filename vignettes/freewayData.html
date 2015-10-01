@@ -10,7 +10,7 @@
 
 <meta name="author" content="Bryan Blanc" />
 
-<meta name="date" content="2015-09-18" />
+<meta name="date" content="2015-10-01" />
 
 <title>Querying, Aggregating, and Exploring PORTAL Freeway Data</title>
 
@@ -55,7 +55,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Querying, Aggregating, and Exploring PORTAL Freeway Data</h1>
 <h4 class="author"><em>Bryan Blanc</em></h4>
-<h4 class="date"><em>2015-09-18</em></h4>
+<h4 class="date"><em>2015-10-01</em></h4>
 </div>
 
 
@@ -120,18 +120,19 @@ agg =<span class="st"> </span><span class="kw">aggTime</span>(<span class="dt">u
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">agg_hod =<span class="st"> </span><span class="kw">aggTime</span>(<span class="dt">unAgg=</span>joined,<span class="dt">aggVars =</span> <span class="st">&quot;lanenumber&quot;</span>,<span class="dt">timeCut =</span> <span class="st">&quot;1 hour&quot;</span>,<span class="dt">acrossDays =</span> <span class="ot">TRUE</span>)
 <span class="kw">head</span>(agg_hod)</code></pre></div>
 <pre><code>##   lanenumber                time volume   occupancy    speed
-## 1          1 2015-09-18 00:00:00   83.8 0.095432099 67.05967
-## 2          1 2015-09-18 01:00:00   36.4 0.028182205 66.69231
-## 3          1 2015-09-18 02:00:00   20.4 0.002425044 65.56863
-## 4          1 2015-09-18 03:00:00   33.2 0.015193312 65.09639
-## 5          1 2015-09-18 04:00:00  127.4 0.192000066 67.75510
-## 6          1 2015-09-18 05:00:00  499.4 1.568012390 72.30877</code></pre>
+## 1          1 2015-10-01 00:00:00   83.8 0.095432099 67.05967
+## 2          1 2015-10-01 01:00:00   36.4 0.028182205 66.69231
+## 3          1 2015-10-01 02:00:00   20.4 0.002425044 65.56863
+## 4          1 2015-10-01 03:00:00   33.2 0.015193312 65.09639
+## 5          1 2015-10-01 04:00:00  127.4 0.192000066 67.75510
+## 6          1 2015-10-01 05:00:00  499.4 1.568012390 72.30877</code></pre>
 <p>This data can be easily visualized using the ggplot2 package. In the first plot, I can see the oscillation in mean hourly traffic speed by lane.</p>
 </div>
 <div id="visualizing" class="section level2">
 <h2>Visualizing</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(ggplot2)
-<span class="co">#Lane number needs to be converted from integer to factor for plotting</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(ggplot2)</code></pre></div>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Lane number needs to be converted from integer to factor for plotting</span>
 agg$lanenumber =<span class="st"> </span><span class="kw">factor</span>(agg$lanenumber)
 <span class="kw">ggplot</span>(agg,<span class="kw">aes</span>(<span class="dt">x=</span>period,<span class="dt">y=</span>speed,<span class="dt">group =</span>lanenumber, <span class="dt">colour =</span> lanenumber))+
 <span class="st">  </span><span class="kw">geom_line</span>()+<span class="kw">scale_colour_discrete</span>(<span class="dt">name=</span><span class="st">&quot;Lane Number&quot;</span>)+
@@ -142,13 +143,7 @@ agg$lanenumber =<span class="st"> </span><span class="kw">factor</span>(agg$lane
 <p>I can visualize the hour of day graph using ggplot and setting up a few of the labels.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(ggplot2)
 <span class="kw">require</span>(scales)</code></pre></div>
-<pre><code>## Loading required package: scales
-## 
-## Attaching package: 'scales'
-## 
-## The following objects are masked from 'package:ggvis':
-## 
-##     fullseq, zero_range</code></pre>
+<pre><code>## Loading required package: scales</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Lane number needs to be converted from integer to factor for plotting</span>
 agg_hod$lanenumber =<span class="st"> </span><span class="kw">factor</span>(agg_hod$lanenumber)
 
