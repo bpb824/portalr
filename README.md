@@ -1,10 +1,7 @@
----
-output: html_document
----
 # portalr
 R package for exploring PORTAL data. 
 
-`portalr` is a package of tools for querying, aggregating, and exploring data from PORTAL (Portland Oregon Regional Transportation Archive Listing). For more information about PORTAL, visit <http://portal.its.pdx.edu>. The `portalr` package is being documented using `staticdocs` at <http://bigtransportdata.com/portalr/>. 
+`portalr` is a package of tools for querying, aggregating, and exploring data from PORTAL (Portland Oregon Regional Transportation Archive Listing). For more information about PORTAL, visit <http://portal.its.pdx.edu>. The `portalr` package is being documented using `staticdocs` at <http://bigtransportdata.com/_portal/portalr/>. 
 
 ## Installation
 
