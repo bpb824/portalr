@@ -13,7 +13,7 @@ aggTime(unAgg, aggVars, timeCut, acrossDays = FALSE)
 
 \item{timeCut}{A string indicating how you want to aggregate over time. Examples include '1 min', '5 min', '1 hour', '1 day', etc.}
 
-\item{hod}{A boolean indicating weather you want to aggregate by hour of day across multiple days.}
+\item{acrossDays}{A boolean indicating weather you want to aggregate by your selected time cut across days.}
 }
 \value{
 Aggregated data.

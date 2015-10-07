@@ -3,7 +3,7 @@
 #' @param unAgg Data that you want to aggregate.
 #' @param aggVars Variables you want to retain in aggregation, such as 'lanenumber' or 'stationid'
 #' @param timeCut A string indicating how you want to aggregate over time. Examples include '1 min', '5 min', '1 hour', '1 day', etc.
-#' @param hod A boolean indicating weather you want to aggregate by hour of day across multiple days.
+#' @param acrossDays A boolean indicating weather you want to aggregate by your selected time cut across days.
 #'
 #' @return Aggregated data.
 #' @export

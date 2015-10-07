@@ -10,7 +10,7 @@
 
 <meta name="author" content="Bryan Blanc" />
 
-<meta name="date" content="2015-10-01" />
+<meta name="date" content="2015-10-07" />
 
 <title>Querying, Aggregating, and Exploring PORTAL Freeway Data</title>
 
@@ -55,7 +55,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Querying, Aggregating, and Exploring PORTAL Freeway Data</h1>
 <h4 class="author"><em>Bryan Blanc</em></h4>
-<h4 class="date"><em>2015-10-01</em></h4>
+<h4 class="date"><em>2015-10-07</em></h4>
 </div>
 
 
@@ -120,12 +120,12 @@ agg =<span class="st"> </span><span class="kw">aggTime</span>(<span class="dt">u
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">agg_hod =<span class="st"> </span><span class="kw">aggTime</span>(<span class="dt">unAgg=</span>joined,<span class="dt">aggVars =</span> <span class="st">&quot;lanenumber&quot;</span>,<span class="dt">timeCut =</span> <span class="st">&quot;1 hour&quot;</span>,<span class="dt">acrossDays =</span> <span class="ot">TRUE</span>)
 <span class="kw">head</span>(agg_hod)</code></pre></div>
 <pre><code>##   lanenumber                time volume   occupancy    speed
-## 1          1 2015-10-01 00:00:00   83.8 0.095432099 67.05967
-## 2          1 2015-10-01 01:00:00   36.4 0.028182205 66.69231
-## 3          1 2015-10-01 02:00:00   20.4 0.002425044 65.56863
-## 4          1 2015-10-01 03:00:00   33.2 0.015193312 65.09639
-## 5          1 2015-10-01 04:00:00  127.4 0.192000066 67.75510
-## 6          1 2015-10-01 05:00:00  499.4 1.568012390 72.30877</code></pre>
+## 1          1 2015-10-07 00:00:00   83.8 0.095432099 67.05967
+## 2          1 2015-10-07 01:00:00   36.4 0.028182205 66.69231
+## 3          1 2015-10-07 02:00:00   20.4 0.002425044 65.56863
+## 4          1 2015-10-07 03:00:00   33.2 0.015193312 65.09639
+## 5          1 2015-10-07 04:00:00  127.4 0.192000066 67.75510
+## 6          1 2015-10-07 05:00:00  499.4 1.568012390 72.30877</code></pre>
 <p>This data can be easily visualized using the ggplot2 package. In the first plot, I can see the oscillation in mean hourly traffic speed by lane.</p>
 </div>
 <div id="visualizing" class="section level2">

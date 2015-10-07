@@ -99,6 +99,7 @@ freewayData = function(con,dets,startTime,endTime){
     endDate = as.Date(endTime)
     #Test if early data not available in freeway table, grab from public table
     if(as.Date(as.POSIXct(min(result$starttime),origin="1970-01-01",tz="America/Los_Angeles"))>as.Date(startDate)){
+      print("'freeway' table did not contain all data, checking 'public' table to see if data is stored there.")
       subEnd = as.Date(as.POSIXct(min(result$starttime),origin="1970-01-01",tz="America/Los_Angeles"))
       startMonth= gsub("-","_",substr(startDate,1,7))
       endMonth= gsub("-","_",substr(subEnd,1,7))
@@ -112,7 +113,7 @@ freewayData = function(con,dets,startTime,endTime){
           }
         }
         query = paste0(query,")")
-        result = DBI::dbGetQuery(con,query)
+        pubResult = DBI::dbGetQuery(con,query)
       }else{
         monthVec = timeDate::timeSequence(startDate,endDate,by="month")
         monthVec = gsub("-","_",substr(monthVec,1,7))
